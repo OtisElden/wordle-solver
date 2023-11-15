@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Wordle Solver",
+  "description": "WOORRRDLE",
+  "version": "0.5",
+  "icons": {
+    "16": "WHITE.png"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["words.json"],  
+      "matches": ["chrome-extension://*/*"]
+    }
+  ]
+}
