@@ -4,6 +4,7 @@
 //Global Variables
 let shadowRootKeys
 let lastWordUsed
+let yellowPositionArray = [];
 
 //Starts the searching function
 elementWatcher();
@@ -41,6 +42,7 @@ function addButton(instructionsDiv) {
 
         //Add listenr to button, activates startItOff function
         document.getElementById("solveButton").addEventListener("click", startItOff);
+        startItOff();
     }
 }
 
@@ -193,6 +195,7 @@ function retrieveUpdatedWord() {
     //Call arrays for gathering info
     let rightPosition = []; //Will always be 5 letters, only place letters that are correct, wildcard elsewhyse
     let wrongPosition = []; //Letters that are right, but not the right position
+    let notPosition = []; //Yellows
 
 
     //Grabs 1st layer again, default area
@@ -207,11 +210,12 @@ function retrieveUpdatedWord() {
 
     //Loop through shadowRoot and find attributes of letter, if green, add to rightPosition, if yellow, add to wrongPosition
 
-    //console.log(currentRow);
+    //yellowPositionArray, global variable, push number followed by letter to it
 
     let tiles = shadowLocation.querySelectorAll('game-tile');
 
 
+    //Checks tiles for the evaluation attribute and then adds to the right array
     for (let i = 0; i < 5; i++) {
 
         //If the letter is green, add to rightPosition
@@ -223,6 +227,8 @@ function retrieveUpdatedWord() {
         if (tiles[i].getAttribute("evaluation") == "present") {
             rightPosition.push("*");
             wrongPosition.push(tiles[i].getAttribute("letter"));
+            yellowPositionArray.push(i + 1)
+            yellowPositionArray.push(tiles[i].getAttribute("letter"))
         }
 
         //If the letter is yellow, add to wrongPosition
@@ -231,6 +237,8 @@ function retrieveUpdatedWord() {
         }
 
     }
+
+    
 
     let passthroughArrays = [rightPosition, wrongPosition];
 
@@ -267,7 +275,7 @@ function notALetter(){
 
 
 //Takes the values returned and builds a string for evaluation
-function buildString(rightPosition, wrongPosition, wrongLetters) {
+function buildString(rightPosition, wrongPosition, wrongLetters, ) {
 
     let rightPositionString = rightPosition.join("");
 
@@ -275,7 +283,7 @@ function buildString(rightPosition, wrongPosition, wrongLetters) {
 
     let wrongLettersString = wrongLetters.join("");
 
-    let finalString = rightPositionString + " " + wrongPositionString + "-" + wrongLettersString + "+";
+    let finalString = rightPositionString + " " + wrongPositionString + "-" + wrongLettersString + "+" + yellowPositionArray;
 
     return finalString;
 }
