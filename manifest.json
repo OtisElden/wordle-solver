@@ -9,10 +9,16 @@
   "action": {
     "default_popup": "popup.html"
   },
+  "content_scripts": [
+    {
+      "matches": [ "https://wordleunlimited.org/*" ],
+      "js": [ "contentScript.js" ]
+    }
+  ],
   "web_accessible_resources": [
     {
-      "resources": ["words.json"],  
-      "matches": ["chrome-extension://*/*"]
+      "resources": [ "words.json" ],
+      "matches": [ "chrome-extension://*/*", "https://wordleunlimited.org/*" ]
     }
   ]
 }

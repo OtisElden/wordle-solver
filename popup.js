@@ -1,111 +1,5 @@
 //JS file for solving the wordle
 
-//IDEAS TO ADD
-
-//Enter button to submit - Added
-//Popup to keep stuff active -> new window - Added
-
-
-//Next to add
-
-//Grab data from site to automate - for sure
-//Add contentscript to share stuff back and forth - for sure
-
-
-//Future ideas
-
-//Add error checker to see if all values have been met, if not return then post error message instead
-//Copy paste button - maybe
-//Build default string - maybe
-//Limit use of multiletters for autochoose - for sure
-//Auto add/type into wesbite - for sure
-//Click replay - for sure
-//Find best word to add to start - maybe
-//Pull info from site and convert to string - for sure
-//Clean up functions - ehhh
-//Faster rewrite? - waaaay later
-
-
-
-
-
-
-
-
-
-//Declares global variables for calling and sending messages to the contentScript
-
-var wordleTabID; //TabID for the contentScript
-var wordlePort //Port for the contentScript, this is what you call when you send messages
-
-
-
-//For getting the tabID of contentScript and connecting popup.js to contentScript
-
-chrome.runtime.onMessage.addListener((request, sender) => {
-
-    if (request.message == "Connection Request From wordle contentScript") {
-
-        wordleTabID = sender.tab.id;
-        wordlePort = chrome.tabs.connect(wordleTabID, { name: "solverPassthrough" });
-
-        console.log("Connected to content script!")
-    }
-    }
-);
-
-
-//Sends massages to the contecstScript. WIll only work if listener has connected.
-function sendToFrontend(messagePass, typeOfSend, referenceToData, HAN, MRN, ERN, mail, Pnumber) {
-
-    wordlePort.postMessage({ message: messagePass, type: typeOfSend, reference: referenceToData, HospitalANumber: HAN, MedicalNumber: MRN, EncounterNumber: ERN, Email: mail, Phone: Pnumber });
-}
-
-
-
-//For opening the port from contentScript and grabbing messages sent from contentScript
-
-chrome.runtime.onConnect.addListener(function (port) {
-
-    port.onMessage.addListener(function (msg) {
-
-    switch (port.name) {
-
-    case "wordlePassthrough":
-
-                switch (msg.type) {
-
-                    case "openPort":
-                        console.log("Connection recieved from contentScript!")
-                        break;
-
-                    case "returnNewValues":
-
-                        //Takes updated input and calls function to update new wordlist
-
-                        //writeTitleToPlaces(msg.message);
-                        //console.log(msg.message);
-                        break;
-
-                    default:
-                        break;
-                }
-    default:
-        break;
-    }
-
-    });
-});
-
-
-
-
-
-
-
-
-
-
 
 //Buton listeners for the popup.html page
 document.getElementById("solveButton").addEventListener("click", guessThatPokemon);
@@ -117,36 +11,6 @@ document.getElementById("wordleInputText").addEventListener("keydown", function(
         guessThatPokemon();
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //Function for getting the worlde input and sending it to other functions, returns those values on and displays on html
@@ -457,8 +321,6 @@ function letterPosition(positionsArray, notPositionArray) {
 }
 
 
-
-
 //Calls the variable for the suggestions to be loaded into as a global variable
 var jsonData = [];
 
@@ -473,10 +335,6 @@ fetch(chrome.runtime.getURL('words.json'))
         console.error('Error loading JSON:', error);
     });
 
-    
-
-
-
 
 //Function here to move popup to a window
 function makeIntoWindow(){
@@ -490,4 +348,3 @@ function makeIntoWindow(){
     // window is created
 });
 }
-
